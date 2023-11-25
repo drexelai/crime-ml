@@ -1,8 +1,8 @@
-from tqdm.notebook import tqdm
+from tqdm import tqdm
 import pandas as pd
 import json
 
-crimes = pd.read_csv('data\crimes.csv')
+crimes = pd.read_csv('data\cartodb-query.csv')
 data = crimes[["dispatch_date", "dispatch_time","location_block", "text_general_code", "point_x", "point_y"]]
 
 police_stations = pd.read_csv('data\Police Station w coordinates.csv').reindex(columns=["OBJECTID", "DISTRICT_NUMBER",
@@ -24,5 +24,5 @@ for index, row in tqdm(data.iterrows(), total=data.shape[0], desc="Processing", 
         distance = manhattan_distance(crime_x, crime_y, station_x, station_y)
         min_distance = min(min_distance, distance)
     distances.append(min_distance)
-with open('min_distances.json', 'w') as f:
+with open('data\min_distances.json', 'w') as f:
     json.dump({"min_distances":distances}, f)
